@@ -8,8 +8,8 @@ const app = express();
 app.use(expressFormidable());
 app.use(cors());
 
-mongoose.connect("mongodb://localhost/marvel");
-// mongoose.connect(process.env.MONGO_DB_URI)
+// mongoose.connect(process.env.MONGO_DB_URI_LOCAL);
+mongoose.connect(process.env.MONGO_DB_URI);
 
 app.get("/", (req, res) => {
   console.log("route /");
@@ -25,7 +25,7 @@ app.use(comicsRoute);
 const comicsCharacterRoute = require("./routes/comicsCharacter");
 app.use(comicsCharacterRoute);
 
-const userRoute = require("./routes/user");
+const userRoute = require("./routes/users");
 app.use(userRoute);
 
 app.all("*", (req, res) => {
