@@ -5,6 +5,7 @@ const SHA256 = require("crypto-js/sha256");
 const encBase64 = require("crypto-js/enc-base64");
 
 const User = require("../models/User");
+const isAuthenticated = require("../middleware/isAuthenticated");
 
 router.post("/signup", async (req, res) => {
   console.log("route sign up");
@@ -76,8 +77,22 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/addFavorite", (req, res) => {
+router.post("/changeFavorite", isAuthenticated, async (req, res) => {
   console.log("route add favorite");
+  console.log("user avant>>>", req.user);
+  const user = req.user;
+  if (req.fields.favoriteCharacters) {
+    user.favoriteCharacters = req.fields.favoriteCharacters;
+  }
+  if (req.fields.favoriteComics) {
+    user.favoriteComics = req.fields.favoriteComics;
+  }
+
+  await user.save();
+  console.log("user après>>>", user);
+
+  // const newFavoriteCh = req.fields.favoriteCharacters;
+  res.status(200).json(user);
 });
 
 module.exports = router;
