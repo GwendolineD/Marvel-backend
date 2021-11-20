@@ -9,7 +9,7 @@ const User = require("../models/User");
 router.post("/signup", async (req, res) => {
   console.log("route sign up");
   //
-
+  console.log(req.fields.favoriteCharacters);
   try {
     const doesEmailExist = await User.findOne({ email: req.fields.email });
     if (doesEmailExist) {
@@ -28,6 +28,8 @@ router.post("/signup", async (req, res) => {
         token: token,
         hash: hash,
         salt: salt,
+        favoriteCharacters: req.fields.favoriteCharacters,
+        favoriteComics: req.fields.favoriteComics,
       });
 
       await newUser.save();
@@ -36,6 +38,8 @@ router.post("/signup", async (req, res) => {
         _id: newUser._id,
         token: newUser.token,
         username: newUser.username,
+        favoriteCharacters: newUser.favoriteCharacters,
+        favoriteComics: newUser.favoriteComics,
       });
     }
   } catch (error) {
@@ -60,6 +64,8 @@ router.post("/login", async (req, res) => {
           _id: doesExist._id,
           token: doesExist.token,
           username: doesExist.username,
+          favoriteCharacters: doesExist.favoriteCharacters,
+          favoriteComics: doesExist.favoriteComics,
         });
       } else {
         res.status(401).json({ message: "Email or password not valid" });
@@ -68,6 +74,10 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+});
+
+router.post("/addFavorite", (req, res) => {
+  console.log("route add favorite");
 });
 
 module.exports = router;
