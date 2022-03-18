@@ -8,8 +8,7 @@ const app = express();
 app.use(expressFormidable());
 app.use(cors());
 
-// mongoose.connect(process.env.MONGO_DB_URI_LOCAL);
-mongoose.connect(process.env.MONGO_DB_URI);
+mongoose.connect(process.env.MONGO_DB_URI || "mongodb://localhost/marvel");
 
 app.get("/", (req, res) => {
   console.log("route /");
@@ -33,6 +32,6 @@ app.all("*", (req, res) => {
   res.status(400).json({ message: "Route not found" });
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("Server has started !");
 });
