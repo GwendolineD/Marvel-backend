@@ -19,9 +19,16 @@ router.post("/signup", async (req, res) => {
     "https://res.cloudinary.com/du3ko16j1/image/upload/v1647876760/Marvel/captain-america_jx8qze.jpg",
     "https://res.cloudinary.com/du3ko16j1/image/upload/v1647876813/Marvel/thanos_-_copie_Small_emibzi.jpg",
     "https://res.cloudinary.com/du3ko16j1/image/upload/v1647876815/Marvel/black-widow_-_copie_Small_lgu71o.jpg",
+    "https://res.cloudinary.com/du3ko16j1/image/upload/v1647978305/Marvel/Spider_Man_na7lxl.jpg",
+    "https://res.cloudinary.com/du3ko16j1/image/upload/v1647978307/Marvel/deadpool_p2s6mh.jpg",
+    "https://res.cloudinary.com/du3ko16j1/image/upload/v1647978312/Marvel/4add457171b651b1362ae462c3b5aa8c_yr4nid.jpg",
+    "https://res.cloudinary.com/du3ko16j1/image/upload/v1647978315/Marvel/931e4422c3582a190cf6f2cebafcaef6_ixsq6x.jpg",
+    "https://res.cloudinary.com/du3ko16j1/image/upload/v1647978318/Marvel/848b537468a62516c0ea40271f85c5e7_pe2vhw.jpg",
+    "https://res.cloudinary.com/du3ko16j1/image/upload/v1647978321/Marvel/Capture_d_e%CC%81cran_2022-03-22_a%CC%80_20.38.34_sk08hw.png",
+    "https://res.cloudinary.com/du3ko16j1/image/upload/v1647978323/Marvel/Marvel-Villainous-Loki_afowtn.jpg",
   ];
 
-  const randomIndex = Math.floor(Math.random() * 7);
+  const randomIndex = Math.floor(Math.random() * 15);
   const avatar = avatars[randomIndex];
 
   try {
@@ -115,6 +122,23 @@ router.post("/changeFavorite", isAuthenticated, async (req, res) => {
   await user.save();
 
   res.status(200).json(user);
+});
+
+router.post("/changeAvatar", isAuthenticated, async (req, res) => {
+  console.log("route change avatar");
+
+  req.user.avatar = req.fields.avatar;
+
+  await req.user.save();
+
+  res.status(200).json({
+    _id: req.user._id,
+    token: req.user.token,
+    username: req.user.username,
+    avatar: req.user.avatar,
+    favoriteCharacters: req.user.favoriteCharacters,
+    favoriteComics: req.user.favoriteComics,
+  });
 });
 
 module.exports = router;
