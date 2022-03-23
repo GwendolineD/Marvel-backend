@@ -27,9 +27,12 @@ app.use(comicsCharacterRoute);
 const userRoute = require("./routes/users");
 app.use(userRoute);
 
+const favorites = require("./routes/favorites");
+app.use(favorites);
+
 app.all("*", (req, res) => {
   console.log("route not found");
-  res.status(400).json({ message: "Route not found" });
+  res.status(400).json({ message: "Route not found 😱" });
 });
 
 app.listen(process.env.PORT || 3000, () => {

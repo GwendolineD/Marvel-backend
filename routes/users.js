@@ -24,8 +24,8 @@ router.post("/signup", async (req, res) => {
 
     if (doesEmailExist) {
       res.status(409).json({ message: "conflict" });
-    } else if (!username) {
-      res.status(400).json({ message: "please enter a username" });
+    } else if (!username || !password || !email) {
+      res.status(406).json({ message: "missing information" });
     } else {
       const salt = uid2(16);
       const hash = SHA256(password + salt).toString(encBase64);
@@ -66,7 +66,7 @@ router.post("/login", async (req, res) => {
 
     const doesExist = await User.findOne({ email: email });
 
-    if (!doesExist) {
+    if (!doesExist || !password) {
       res.status(401).json({ message: "Email or password not valid" });
     } else {
       const userSalt = doesExist.salt;
@@ -95,18 +95,17 @@ router.post("/changeFavorite", isAuthenticated, async (req, res) => {
   console.log("route add favorite");
 
   const { favoriteCharacters, favoriteComics } = req.fields;
-  const user = req.user;
 
   if (favoriteCharacters) {
-    user.favoriteCharacters = favoriteCharacters;
+    req.user.favoriteCharacters = favoriteCharacters;
   }
   if (favoriteComics) {
-    user.favoriteComics = favoriteComics;
+    req.user.favoriteComics = favoriteComics;
   }
 
-  await user.save();
+  await req.user.save();
 
-  res.status(200).json(user);
+  res.status(200).json(req.user);
 });
 
 router.post("/user/update", isAuthenticated, async (req, res) => {
