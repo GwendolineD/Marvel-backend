@@ -95,6 +95,7 @@ router.post("/changeFavorite", isAuthenticated, async (req, res) => {
   console.log("route add favorite");
 
   const { favoriteCharacters, favoriteComics } = req.fields;
+  console.log("favCh>>>>", favoriteCharacters);
 
   if (favoriteCharacters) {
     req.user.favoriteCharacters = favoriteCharacters;
@@ -102,6 +103,7 @@ router.post("/changeFavorite", isAuthenticated, async (req, res) => {
   if (favoriteComics) {
     req.user.favoriteComics = favoriteComics;
   }
+  console.log("favCh après>>>>", req.user.favoriteCharacters);
 
   await req.user.save();
 
